@@ -5,11 +5,9 @@ from django.contrib import messages
 from .models import CustomerUser
 
 def home(request):
-    """Главная страница"""
     return render(request, 'catalog/home.html')
 
 def login_view(request):
-    """Страница входа"""
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -17,7 +15,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, "Вы успешно вошли в систему!")
-            return redirect('home')  # Перенаправляем на главную
+            return redirect('home')
         else:
             messages.error(request, "Неверный логин или пароль.")
     
@@ -53,7 +51,9 @@ def register(request):
     return render(request, 'registration/register.html')
 
 def logout_view(request):
-    """Выход из системы"""
     logout(request)
     messages.info(request, "Вы вышли из системы.")
     return redirect('home')
+
+def home(request):
+    return render(request, 'home.html')
