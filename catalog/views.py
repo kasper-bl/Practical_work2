@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .models import CustomerUser
 
 def home(request):
-    return render(request, 'catalog/home.html')
+    return render(request, 'catalog/index.html')
 
 def login_view(request):
     if request.method == 'POST':
@@ -15,14 +14,13 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, "Вы успешно вошли в систему!")
-            return redirect('home')
+            return redirect('index')
         else:
             messages.error(request, "Неверный логин или пароль.")
     
     return render(request, 'registration/login.html')
 
 def register(request):
-    """Регистрация нового пользователя"""
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -46,14 +44,14 @@ def register(request):
             user.save()
             login(request, user)
             messages.success(request, "Регистрация прошла успешно! Вы вошли в систему.")
-            return redirect('home')
+            return redirect('index')
 
     return render(request, 'registration/register.html')
 
 def logout_view(request):
     logout(request)
     messages.info(request, "Вы вышли из системы.")
-    return redirect('home')
+    return redirect('index')
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'index.html')
