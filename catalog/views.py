@@ -72,13 +72,16 @@ def user_application(request):
     return render(request, 'user_application.html', context)
 
 
-def appliation_views(request):
+@login_required
+def application_views(request):
     if request.method == 'POST':
         form = ApplicationForm(request.POST, request.FILES)
         if form.is_valid():
-            application = form.save()
+            application = form.save(commit=False)
+            application.user = request.user
+            application.save()
             messages.success(request, 'Заявка успешно создана!')
-            return redirect('application_success') 
+            return redirect('index') 
         else:
             messages.error(request, 'Пожалуйста исправте ошибки')
     else:
