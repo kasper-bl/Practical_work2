@@ -6,13 +6,6 @@
 </head>
 <body>
     <h2>Вход в личный кабинет</h2>
-
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: red;">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-
     <form method="post">
         {% csrf_token %}
         <label>Логин:</label><br>

@@ -2,39 +2,76 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Главная страница</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница - Design.pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Только градиент фона, остальное через Bootstrap */
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
-            </li>
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold fs-3" href="#">
+                Design<span class="text-danger">.pro</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium text-dark" href="#">Страничка</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium text-dark" href="#">страничка</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium text-dark" href="#">страничка</a>
+                    </li>
+                </ul>
+                {% if user.is_authenticated %}
+                    <ul class="navbar-nav ms-3">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-danger rounded-pill px-4 fw-medium" href="{% url 'logout' %}">Выйти</a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg rounded-4">
+                    <div class="card-body p-5">
+                        <h1 class="display-5 fw-bold text-center mb-4">
+                            Добро пожаловать на <span class="text-danger">Design.pro</span>!
+                        </h1>
+                        {% if user.is_authenticated %}
+                            <div class="text-center">
+                                <h2 class="text-success">Здравствуйте, {{ user.full_name }}!</h2>
+                                <p class="text-muted">Рады видеть вас снова</p>
+                            </div>
+                        {% else %}
+                            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                <a href="{% url 'login' %}" class="btn btn-danger rounded-pill px-5 py-2 fw-medium">
+                                    Войти в аккаунт
+                                </a>
+                                <a href="{% url 'register' %}" class="btn btn-outline-danger rounded-pill px-5 py-2 fw-medium">
+                                    Зарегистрироваться
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    </nav>
-    <h1>Добро пожаловать на главную страницу!</h1>
-
-    {% if user.is_authenticated %}
-        <p>Здравствуйте, {{ user.full_name }}!</p>
-        <p><a href="{% url 'logout' %}">Выйти</a></p>
-    {% else %}
-        <a href="{% url 'login' %}">Войти</a>
-        <a href="{% url 'register' %}">Зарегистрироваться</a>
-    {% endif %}
 </body>
 </html>
