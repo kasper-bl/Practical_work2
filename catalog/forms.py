@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 import re
-from .models import CustomerUser
+from .models import Application, CustomerUser
 
 class RegistrationForm(UserCreationForm):
     full_name = forms.CharField(
@@ -32,3 +32,14 @@ class RegistrationForm(UserCreationForm):
     
     def clean_agree_personal_data(self):
         agree = self.cleaned_data['agree_personal_data']
+
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ['title', 'description', 'category', 'img_Application']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите название'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Введите описание'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
+        

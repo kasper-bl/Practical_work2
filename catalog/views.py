@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from .models import CustomerUser
-from .forms import RegistrationForm
+from .forms import RegistrationForm, ApplicationForm
 
 def home(request):
     return render(request, 'catalog/index.html')
@@ -42,3 +42,16 @@ def logout_view(request):
 
 def home(request):
     return render(request, 'index.html')
+
+def appliation_views(request):
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            application = form.save()
+            messages.success(request, 'Заявка успешно создана!')
+            return redirect('application_success')  # замените на ваш URL
+        else:
+            messages.error(request, 'Пожалуйста исправте ошибки')
+    else:
+        form = ApplicationForm()
+    return render(request, 'create_application.html', {'form': form})

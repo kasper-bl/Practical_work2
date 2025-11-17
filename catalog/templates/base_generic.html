@@ -20,7 +20,7 @@
                         {% if user.is_authenticated %}  
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                <a class="nav-link fw-medium text-dark" href="#">Создание заявки</a>
+                                <a class="nav-link fw-medium text-dark" href="{% url 'create_application'%}">Создание заявки</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link fw-medium text-dark" href="#">Мои заявки</a>
