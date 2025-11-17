@@ -4,10 +4,10 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from .models import Application
 from .forms import RegistrationForm, ApplicationForm
+
+
 def index(request):
     done_applications = Application.objects.filter(status='done').order_by('-created_at')
-
-    # Пагинация
     paginator = Paginator(done_applications, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -51,6 +51,25 @@ def logout_view(request):
     messages.info(request, "Вы вышли из системы.")
     return redirect('index')
 
+@login_required
+def user_application(request):
+    status_filter = request.GET.get('status', '')
+    applications = Application.objects.filter(user=request.user)
+    if status_filter:
+        appliations = appliations.filter(status = status_filter)
+
+    paginator = Paginator(appliations, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'applications': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+        'page_obj': page_obj,
+        'status_filter': status_filter,
+    }
+    return render(request, 'user_application.html', context)
+
 
 def appliation_views(request):
     if request.method == 'POST':
@@ -64,3 +83,4 @@ def appliation_views(request):
     else:
         form = ApplicationForm()
     return render(request, 'create_application.html', {'form': form})
+

@@ -32,7 +32,9 @@ class Application(models.Model):
     comment = models.TextField(blank=True, verbose_name="Комментарий")
     img_Application = models.ImageField(upload_to='images/', verbose_name='Изображение', validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'bmp'])],)
     status = models.CharField(verbose_name='статус', choices = STATUS_CHOICES, default='new',)
+    user = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, verbose_name='Пользователь')
 
     class Meta:
         verbose_name = 'Заявка'
         verbose_name_plural = 'Заявки'
+        ordering = ['-created_at']
