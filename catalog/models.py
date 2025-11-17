@@ -5,3 +5,13 @@ from django.contrib.auth.models import AbstractUser
 class CustomerUser(AbstractUser):
     full_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Название категории")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
