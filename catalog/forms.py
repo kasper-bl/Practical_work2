@@ -18,14 +18,6 @@ class RegistrationForm(UserCreationForm):
         label='Согласие на обработку персональных данных',
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
     )
-
-    class Meta:
-        model = CustomerUser
-        fields = ['username', 'email', 'full_name', 'password1', 'password2']
-        widgets = {
-            'username': forms.TextInput(attrs={ 'placeholder': 'Только латиница и дефис'})
-        }
-    
     def clean_username(self):
         username = self.cleaned_data['username']
         if not re.match(r'^[a-zA-Z\-]+$', username):
