@@ -1,64 +1,67 @@
 {% extends "base_generic.html" %}
 {% block content %}
-    <div class="container mt-5">
-        <h2>Регистрация</h2>
+    <main>
+        <div class="container mt-5" style="height: 80vh">
+            <h2>Регистрация</h2>
 
-        <form method="post" class="mt-4">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label">{{ form.username.label }}</label>
-                {{ form.username }}
-                {% if form.username.errors %}
-                    <div class="text-danger small">{{ form.username.errors|join:", " }}</div>
-                {% endif %}
-            </div>
-            <div class="mb-3">
-                <label class="form-label">{{ form.email.label }}</label>
-                {{ form.email }}
-                {% if form.email.errors %}
-                    <div class="text-danger small">{{ form.email.errors|join:", " }}</div>
-                {% endif %}
-            </div>
-            <div class="mb-3">
-                <label class="form-label">{{ form.full_name.label }}</label>
-                {{ form.full_name }}
-                {% if form.full_name.errors %}
-                    <div class="text-danger small">{{ form.full_name.errors|join:", " }}</div>
-                {% endif %}
-            </div>
-            <div class="mb-3">
-                <label class="form-label">{{ form.password1.label }}</label>
-                {{ form.password1 }}
-                {% if form.password1.errors %}
-                    <div class="text-danger small">{{ form.password1.errors|join:", " }}</div>
-                {% endif %}
-            </div>
-            <div class="mb-3">
-                <label class="form-label">{{ form.password2.label }}</label>
-                {{ form.password2 }}
-                {% if form.password2.errors %}
-                    <div class="text-danger small">{{ form.password2.errors|join:", " }}</div>
-                {% endif %}
-            </div>
-            <div class="mb-3 form-check">
-                {{ form.agree_personal_data }}
-                <label class="form-check-label">{{ form.agree_personal_data.label }}</label>
-                <a href="#" class="ms-1">персональных данных</a>
-                {% if form.agree_personal_data.errors %}
-                    <div class="text-danger small">{{ form.agree_personal_data.errors|join:", " }}</div>
-                {% endif %}
-            </div>
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger">
-                    {{ form.non_field_errors|join:", " }}
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">{{ form.username.label }}</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="text-danger small">{{ form.username.errors|join:", " }}</div>
+                    {% endif %}
                 </div>
-            {% endif %}
+                <div class="mb-3">
+                    <label class="form-label">{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="text-danger small">{{ form.email.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.full_name.label }}</label>
+                    {{ form.full_name }}
+                    {% if form.full_name.errors %}
+                        <div class="text-danger small">{{ form.full_name.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.password1.label }}</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <div class="text-danger small">{{ form.password1.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.password2.label }}</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <div class="text-danger small">{{ form.password2.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3 form-check">
+                    {{ form.agree_personal_data }}
+                    <label class="form-check-label">{{ form.agree_personal_data.label }}</label>
+                    <a href="#" class="ms-1">персональных данных</a>
+                    {% if form.agree_personal_data.errors %}
+                        <div class="text-danger small">{{ form.agree_personal_data.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors|join:", " }}
+                    </div>
+                {% endif %}
 
-            <button type="submit" class="btn btn-danger">Зарегистрироваться</button>
-        </form>
+                <button type="submit" class="btn btn-danger">Зарегистрироваться</button>
+            </form>
 
-        <p class="mt-3">
-            <a href="{% url 'login' %}">Уже есть аккаунт? Войти</a>
-        </p>
-    </div>
+            <p class="mt-3">
+                <a href="{% url 'login' %}">Уже есть аккаунт? Войти</a>
+            </p>
+        </div>
+    </main>
+    
 {% endblock%}
