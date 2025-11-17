@@ -5,13 +5,15 @@ from .models import CustomerUser, Application
 from .forms import RegistrationForm, ApplicationForm
 
 def index(request):
-    done_applications = Application.objects.filter(
-        status = 'done'
-    ).order_by('-created_at')[:4]
+    done_applications = Application.objects.filter(status='done').order_by('-created_at')[:4]
+    print("Количество выполненных заявок:", done_applications.count())  # ← Для отладки
+    for app in done_applications:
+        print(f"ID: {app.id}, Title: {app.title}, Status: {app.status}")
+
     context = {
         'done_applications': done_applications
     }
-    return render(request, 'catalog/index.html')
+    return render(request, 'index.html', context)
 
 def login_view(request):
     if request.method == 'POST':
@@ -46,8 +48,6 @@ def logout_view(request):
     messages.info(request, "Вы вышли из системы.")
     return redirect('index')
 
-def home(request):
-    return render(request, 'index.html')
 
 def appliation_views(request):
     if request.method == 'POST':

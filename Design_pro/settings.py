@@ -90,3 +90,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_PASSWORD_VALIDATORS = []
 
 AUTH_USER_MODEL = 'catalog.CustomerUser'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
