@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from .models import CustomerUser
+from .forms import RegistrationForm
 
 def home(request):
     return render(request, 'catalog/index.html')
@@ -22,31 +23,17 @@ def login_view(request):
 
 def register(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        full_name = request.POST.get('full_name')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-
-        if password1 != password2:
-            messages.error(request, "Пароли не совпадают.")
-        elif CustomerUser.objects.filter(username=username).exists():
-            messages.error(request, "Пользователь с таким логином уже существует.")
-        elif CustomerUser.objects.filter(email=email).exists():
-            messages.error(request, "Пользователь с таким email уже существует.")
-        else:
-            user = CustomerUser.objects.create_user(
-                username=username,
-                email=email,
-                password=password1,
-                full_name=full_name
-            )
-            user.save()
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            # Сохраняем пользователя
+            user = form.save()
             login(request, user)
             messages.success(request, "Регистрация прошла успешно! Вы вошли в систему.")
             return redirect('index')
+    else:
+        form = RegistrationForm()
 
-    return render(request, 'registration/register.html')
+    return render(request, 'registration/register.html', {'form': form})
 
 def logout_view(request):
     logout(request)
