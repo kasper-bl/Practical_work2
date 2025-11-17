@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from .models import Application
 from .forms import RegistrationForm, ApplicationForm
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -56,9 +57,9 @@ def user_application(request):
     status_filter = request.GET.get('status', '')
     applications = Application.objects.filter(user=request.user)
     if status_filter:
-        appliations = appliations.filter(status = status_filter)
+        applications = applications.filter(status = status_filter)
 
-    paginator = Paginator(appliations, 4)
+    paginator = Paginator(applications, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
