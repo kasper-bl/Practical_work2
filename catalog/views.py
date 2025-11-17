@@ -1,10 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from .models import CustomerUser
+from .models import CustomerUser, Application
 from .forms import RegistrationForm, ApplicationForm
 
-def home(request):
+def index(request):
+    done_applications = Application.objects.filter(
+        status = 'done'
+    ).order_by('-created_at')[:4]
+    context = {
+        'done_applications': done_applications
+    }
     return render(request, 'catalog/index.html')
 
 def login_view(request):

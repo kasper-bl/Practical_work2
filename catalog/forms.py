@@ -43,3 +43,9 @@ class ApplicationForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-control'}),
         }
         
+    def clean_img_Application(self):
+        img = self.cleaned_data.get('img_Application')
+        if img:
+            if img.size > 2 * 1024 * 1024: 
+                raise ValidationError('Размер файла не должен превышать 2 МБ.')
+        return img
