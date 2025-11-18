@@ -10,35 +10,35 @@
                     <label class="form-label">{{ form.username.label }}</label>
                     {{ form.username }}
                     {% if form.username.errors %}
-                        <div class="text-danger small">{{ form.username.errors|join:", " }}</div>
+                        <div class="text-danger small">{{ form.username.errors }}</div>
                     {% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label">{{ form.email.label }}</label>
                     {{ form.email }}
                     {% if form.email.errors %}
-                        <div class="text-danger small">{{ form.email.errors|join:", " }}</div>
+                        <div class="text-danger small">{{ form.email.errors}}</div>
                     {% endif %}
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">{{ form.full_name.label }}</label>
+                    <label class="form-label ">{{ form.full_name.label }}</label>
                     {{ form.full_name }}
                     {% if form.full_name.errors %}
-                        <div class="text-danger small">{{ form.full_name.errors|join:", " }}</div>
+                        <div class="text-danger small">{{ form.full_name.errors}}</div>
                     {% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label">{{ form.password1.label }}</label>
                     {{ form.password1 }}
                     {% if form.password1.errors %}
-                        <div class="text-danger small">{{ form.password1.errors|join:", " }}</div>
+                        <div class="text-danger small">{{ form.password1.errors}}</div>
                     {% endif %}
                 </div>
                 <div class="mb-3">
                     <label class="form-label">{{ form.password2.label }}</label>
                     {{ form.password2 }}
                     {% if form.password2.errors %}
-                        <div class="text-danger small">{{ form.password2.errors|join:", " }}</div>
+                        <div class="text-danger small">{{ form.password2.errors}}</div>
                     {% endif %}
                 </div>
                 <div class="mb-3 form-check">
@@ -46,12 +46,12 @@
                     <label class="form-check-label">{{ form.agree_personal_data.label }}</label>
                     <a href="#" class="ms-1">персональных данных</a>
                     {% if form.agree_personal_data.errors %}
-                        <div class="text-danger small">{{ form.agree_personal_data.errors|join:", " }}</div>
+                        <div class="text-danger small">{{ form.agree_personal_data.errors}}</div>
                     {% endif %}
                 </div>
                 {% if form.non_field_errors %}
                     <div class="alert alert-danger">
-                        {{ form.non_field_errors|join:", " }}
+                        {{ form.non_field_errors}}
                     </div>
                 {% endif %}
 

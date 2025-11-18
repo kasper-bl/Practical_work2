@@ -1,23 +1,34 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 import re
+from django.contrib.auth import get_user_model
 from .models import Application, CustomerUser
 
-class RegistrationForm(UserCreationForm):
+class RegistrationForm(forms.ModelForm):
     full_name = forms.CharField(
         max_length=255,
-        label='ФИО'
+        label='ФИО',
+        widget=forms.TextInput(attrs = {'class': 'form-control'}) 
     )
     email = forms.EmailField(
         label='email',
-        widget=forms.EmailInput(attrs={ 'placeholder': 'qwe@example.com'})
+        widget=forms.EmailInput(attrs={ 'class': 'form-control', 'placeholder': 'qwe@example.com'})
     )
     agree_personal_data = forms.BooleanField(
         required=True,
         label='Согласие на обработку персональных данных',
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
     )
+
+    password1 = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+    password2 = forms.CharField(
+        label='Подтверждение пароля',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+    )
+
     def clean_username(self):
         username = self.cleaned_data['username']
         if not re.match(r'^[a-zA-Z\-]+$', username):
@@ -32,6 +43,27 @@ class RegistrationForm(UserCreationForm):
     
     def clean_agree_personal_data(self):
         agree = self.cleaned_data['agree_personal_data']
+    
+    class Meta:
+        model = CustomerUser
+        fields = ['username', 'email', 'full_name', 'agree_personal_data']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Логин'}),
+        }
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise ValidationError('Пароли не совпадают')
+        return password2
+
+    def save(self, commit=True): 
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
+        if commit:
+            user.save()
+        return user
+    
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
