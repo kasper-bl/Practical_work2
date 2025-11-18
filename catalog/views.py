@@ -49,7 +49,6 @@ def register(request):
 
 def logout_view(request):
     logout(request)
-    messages.info(request, "Вы вышли из системы.")
     return redirect('index')
 
 @login_required
