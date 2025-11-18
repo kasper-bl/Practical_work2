@@ -9,9 +9,7 @@
                 
                 {% if messages %}
                     {% if 'error' in message.tags %}
-                        <div class="alert alert-danger mb-3">
-                            {{ message }}
-                        </div>
+                        <div class="alert alert-danger mb-3">{{ message }}</div>
                     {% endif %}
 
                 {% endif %}
