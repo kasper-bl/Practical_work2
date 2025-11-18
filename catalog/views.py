@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -86,4 +86,16 @@ def application_views(request):
     else:
         form = ApplicationForm()
     return render(request, 'create_application.html', {'form': form})
+
+@login_required
+def delete_application(request, pk):
+    application = get_object_or_404(Application, pk=pk)
+    if request.method == 'POST':
+        application.delete()
+        messages.success(request, 'Удалено')
+        return redirect('user_application')
+    context = {
+        'application': application
+    }
+    return render(request, 'delete_application_confirm.html', context)
 
