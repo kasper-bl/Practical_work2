@@ -8,13 +8,12 @@
                 {% csrf_token %}
                 
                 {% if messages %}
-                    {% for message in messages %}
-                        {% if 'error' in message.tags %}
-                            <div class="alert alert-danger mb-3">
-                                {{ message }}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                    {% if 'error' in message.tags %}
+                        <div class="alert alert-danger mb-3">
+                            {{ message }}
+                        </div>
+                    {% endif %}
+
                 {% endif %}
 
                 <div class="mb-3">
