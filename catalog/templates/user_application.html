@@ -56,14 +56,8 @@
                                                 {{ app.category.name }}
                                             </p>
                                         </div>
-                                        
-                                        <!-- ✅ Кнопка удаления -->
-                                        {% if app.user == user and app.pk %}
-                                            <a href="{% url 'delete_application' app.pk %}" 
-                                               class="btn btn-sm btn-outline-danger ms-2"
-                                               onclick="return confirm('Вы уверены, что хотите удалить заявку?')">
-                                                Удалить
-                                            </a>
+                                        {% if app.user == user and app.pk and app.status == 'new'%}
+                                            <a href="{% url 'delete_application' app.pk %}" class="btn btn-sm btn-outline-danger ms-2">Удалить</a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -73,7 +67,6 @@
                 </div>
 
                 {% if is_paginated %}
-                    <!-- пагинация как есть -->
                 {% endif %}
 
             {% else %}
