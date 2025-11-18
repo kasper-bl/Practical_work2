@@ -1,0 +1,43 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h2>Управление категориями</h2>
+    
+    <!-- Форма добавления категории -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Добавить новую категорию</h5>
+            <form method="post" action="{% url 'add_category' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <input type="text" name="name" class="form-control" 
+                           placeholder="Название категории" required 
+                           maxlength="100" />
+                </div>
+                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">Добавить категорию</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        {% for category in categories %}
+        <div class="col-md-6 col-lg-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.name }}</h5>
+                    <p class="card-text">
+                        Заявок в категории: 
+                        <span>{{ category.application_set.count }}</span>
+                    </p>
+                    <a href="{% url 'delete_category' category.pk %}" class="btn btn-sm btn-outline-danger rounded-pill"> Удалить</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <div class="alert alert-info">
+                <p class="alert-heading">Нет категорий</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

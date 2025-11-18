@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.core.paginator import Paginator
-from .models import Application
+from .models import Application, Category
 from .forms import RegistrationForm, ApplicationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 
@@ -12,11 +12,13 @@ def index(request):
     paginator = Paginator(done_applications, 4)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    accepted_count = Application.objects.filter(status='accepted').count()
 
     context = {
         'done_applications': page_obj, 
         'is_paginated': page_obj.has_other_pages(), 
         'page_obj': page_obj, 
+         'accepted_count': accepted_count,
     }
     return render(request, 'index.html', context)
 
@@ -106,7 +108,6 @@ def is_superuser(user):
 @login_required
 @user_passes_test(is_superuser)
 def admin_applications(request):
-    """Страница для админа - список всех заявок"""
     status_filter = request.GET.get('status', '')
     
     applications = Application.objects.all()
@@ -122,16 +123,12 @@ def admin_applications(request):
 @login_required
 @user_passes_test(is_superuser)
 def change_status(request, pk):
-    """Изменение статуса заявки админом"""
     application = get_object_or_404(Application, pk=pk)
     
     if request.method == 'POST':
         new_status = request.POST.get('status')
-        
-        # Проверка правил смены статуса
         if application.status == 'new':
             if new_status == 'done':
-                # Для статуса "Выполнено" нужно изображение
                 if 'design_image' in request.FILES:
                     application.img_Application = request.FILES['design_image']
                     application.status = new_status
@@ -142,7 +139,6 @@ def change_status(request, pk):
                     return redirect('admin_applications')
                     
             elif new_status == 'accepted':
-                # Для статуса "Принято в работу" нужно указать комментарий
                 comment = request.POST.get('comment', '').strip()
                 if comment:
                     application.comment = comment
@@ -163,3 +159,46 @@ def change_status(request, pk):
         return redirect('admin_applications')
     
     return redirect('admin_applications')
+
+def is_superuser(user):
+    return user.is_superuser
+
+@login_required
+@user_passes_test(is_superuser)
+def manage_categories(request):
+    """Страница управления категориями"""
+    categories = Category.objects.all()
+    context = {
+        'categories': categories
+    }
+    return render(request, 'manage_categories.html', context)
+
+@login_required
+@user_passes_test(is_superuser)
+def add_category(request):
+    """Добавление новой категории"""
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        if name:
+            Category.objects.create(name=name)
+            messages.success(request,'Категория =добавлена')
+        else:
+            messages.error(request, 'Название категории не может быть пустым')
+    return redirect('manage_categories')
+
+@login_required
+@user_passes_test(is_superuser)
+def delete_category(request, pk):
+    category = get_object_or_404(Category, pk=pk)
+    applications_count = Application.objects.filter(category=category).count()
+    
+    if request.method == 'POST':
+        Application.objects.filter(category=category).delete()
+        category.delete()
+        messages.success(request, f'Категория "{category.name}" и все заявки в ней удалены')
+        return redirect('manage_categories')
+    context = {
+        'category': category,
+        'applications_count': applications_count
+    }
+    return render(request, 'delete_category_confirm.html', context)

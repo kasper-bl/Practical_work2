@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <main>
+        <section class="container mt-5" style="height: 85vh;">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Подтверждение удаления</h3>
+                    <p class="card-text"> Вы уверены, что хотите удалить категорию <strong>"{{ category.name }}"</strong>?</p>            
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger me-2">Удалить</button>
+                        <a href="{% url 'manage_categories' %}" class="btn btn-secondary">Отмена</a>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

@@ -12,4 +12,7 @@ urlpatterns = [
     path('delete_application/<int:pk>/', views.delete_application, name='delete_application'),
     path('admin/applications/', views.admin_applications, name='admin_applications'),
     path('admin/application/<int:pk>/change_status/', views.change_status, name='change_status'),
+    path('admin/categories/', views.manage_categories, name='manage_categories'),
+    path('admin/categories/add/', views.add_category, name='add_category'),
+    path('admin/categories/delete/<int:pk>/', views.delete_category, name='delete_category'),
 ]
