@@ -7,6 +7,22 @@
                 <h1 class="h2">Мои заявки</h1>
             </header>
 
+            <!-- ✅ Форма фильтрации -->
+            <div class="mb-4">
+                <form method="get" class="d-flex flex-wrap gap-2">
+                    <select name="status" class="form-select w-auto">
+                        <option value="">Все статусы</option>
+                        <option value="new" {% if status_filter == 'new' %}selected{% endif %}>Новая</option>
+                        <option value="accepted" {% if status_filter == 'accepted' %}selected{% endif %}>Принято в работу</option>
+                        <option value="done" {% if status_filter == 'done' %}selected{% endif %}>Выполнено</option>
+                    </select>
+                    <button type="submit" class="btn btn-outline-secondary">Фильтровать</button>
+                    {% if status_filter %}
+                        <a href="{% url 'user_application' %}" class="btn btn-outline-secondary">Сбросить</a>
+                    {% endif %}
+                </form>
+            </div>
+
             {% if applications %}
                 <div class="row g-4">
                     {% for app in applications %}
@@ -40,10 +56,14 @@
                                                 {{ app.category.name }}
                                             </p>
                                         </div>
-
+                                        
+                                        <!-- ✅ Кнопка удаления -->
                                         {% if app.user == user and app.pk %}
                                             <a href="{% url 'delete_application' app.pk %}" 
-                                               class="btn btn-sm btn-outline-danger ms-2">Удалить</a>
+                                               class="btn btn-sm btn-outline-danger ms-2"
+                                               onclick="return confirm('Вы уверены, что хотите удалить заявку?')">
+                                                Удалить
+                                            </a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -53,12 +73,13 @@
                 </div>
 
                 {% if is_paginated %}
+                    <!-- пагинация как есть -->
                 {% endif %}
 
             {% else %}
                 <div class="alert alert-info">
                     {% if status_filter %}
-                        Нет заявок со статусом "{{ app.get_status_display }}".
+                        Нет заявок по выбранному статусу.
                     {% else %}
                         У вас пока нет заявок.
                     {% endif %}
