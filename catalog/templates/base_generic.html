@@ -13,7 +13,12 @@
                     <a class="navbar-brand fw-bold fs-3" href="{% url 'index'%}">
                         Design<span class="text-danger">.pro</span>
                     </a>
-                    {% if user.is_authenticated %}  
+                    {% if user.is_authenticated and user.is_superuser %}
+                        <nav class="d-flex align-items-center gap-3">
+                            <a class="nav-link fw-medium text-dark" href="{% url 'admin_applications'%}">Управление заявками</a>
+                            <a class="btn btn-outline-danger rounded-pill px-4 fw-medium" href="{% url 'logout' %}">Выйти</a>
+                        </nav>
+                    {% elif user.is_authenticated %}
                         <nav class="d-flex align-items-center gap-3">
                             <a class="nav-link fw-medium text-dark" href="{% url 'create_application'%}">Создание заявки</a>
                             <a class="nav-link fw-medium text-dark" href="{%url 'user_application'%}">Мои заявки</a>

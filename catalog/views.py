@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from .models import Application
 from .forms import RegistrationForm, ApplicationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 
 def index(request):
@@ -99,3 +99,67 @@ def delete_application(request, pk):
     }
     return render(request, 'delete_application_confirm.html', context)
 
+
+def is_superuser(user):
+    return user.is_superuser
+
+@login_required
+@user_passes_test(is_superuser)
+def admin_applications(request):
+    """Страница для админа - список всех заявок"""
+    status_filter = request.GET.get('status', '')
+    
+    applications = Application.objects.all()
+    if status_filter:
+        applications = applications.filter(status=status_filter)
+    
+    context = {
+        'applications': applications,
+        'status_filter': status_filter,
+    }
+    return render(request, 'admin_applications.html', context)
+
+@login_required
+@user_passes_test(is_superuser)
+def change_status(request, pk):
+    """Изменение статуса заявки админом"""
+    application = get_object_or_404(Application, pk=pk)
+    
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        
+        # Проверка правил смены статуса
+        if application.status == 'new':
+            if new_status == 'done':
+                # Для статуса "Выполнено" нужно изображение
+                if 'design_image' in request.FILES:
+                    application.img_Application = request.FILES['design_image']
+                    application.status = new_status
+                    application.save()
+                    messages.success(request, 'Статус заявки изменён на "Выполнено"')
+                else:
+                    messages.error(request, 'Для статуса "Выполнено" нужно прикрепить изображение')
+                    return redirect('admin_applications')
+                    
+            elif new_status == 'accepted':
+                # Для статуса "Принято в работу" нужно указать комментарий
+                comment = request.POST.get('comment', '').strip()
+                if comment:
+                    application.comment = comment
+                    application.status = new_status
+                    application.save()
+                    messages.success(request, 'Статус заявки изменён на "Принято в работу"')
+                else:
+                    messages.error(request, 'Для статуса "Принято в работу" нужно указать комментарий')
+                    return redirect('admin_applications')
+            else:
+                messages.error(request, 'Недопустимый статус')
+                return redirect('admin_applications')
+                
+        else:
+            messages.error(request, 'Нельзя изменить статус заявки, которая не в статусе "Новая"')
+            return redirect('admin_applications')
+        
+        return redirect('admin_applications')
+    
+    return redirect('admin_applications')
