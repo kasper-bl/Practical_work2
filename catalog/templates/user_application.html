@@ -43,11 +43,7 @@
 
                                     <div class="d-flex flex-wrap justify-content-between align-items-center mt-3">
                                         <div>
-                                            <p class="badge 
-                                                {% if app.status == 'new' %}bg-primary
-                                                {% elif app.status == 'accepted' %}bg-warning text-dark
-                                                {% elif app.status == 'done' %}bg-success
-                                                {% endif %}">
+                                            <p class="badge ">
                                                 {{ app.get_status_display }}
                                             </p>
                                             <p class="badge bg-secondary ms-1">

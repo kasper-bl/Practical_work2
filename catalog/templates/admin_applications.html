@@ -30,11 +30,7 @@
                 </p>
                 
                 <div class="d-flex align-items-center gap-3">
-                    <span class="badge 
-                        {% if app.status == 'new' %}bg-primary
-                        {% elif app.status == 'accepted' %}bg-warning text-dark
-                        {% elif app.status == 'done' %}bg-success
-                        {% endif %}">
+                    <span class="badge">
                         {{ app.get_status_display }}
                     </span>
                     
